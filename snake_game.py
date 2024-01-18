@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # In[1]:
 
 
@@ -93,31 +90,34 @@ def my_snake(snake_block,snake_list):
     for x in snake_list:
         pygame.draw.rect(dis,green,[x[0],x[1],snake_block,snake_block])
 
+def draw_apple(apple_x, apple_y):
+    pygame.draw.circle(dis, red, [int(apple_x), int(apple_y)], snake_block // 2)
+
 
 # In[21]:
-
 
 def main_game():
     game_over = False
     game_close = False
+    first_move = True
 
-    x1 = dis_width/2
-    y1 = dis_height/2
+    x1 = dis_width / 2
+    y1 = dis_height / 2
 
     x1_change = 0
     y1_change = 0
 
-    snake_list =[]
+    snake_list = []
     length_snake = 1
 
-    foodx = round(random.randrange(0,dis_width- snake_block)/10.0)*10.0
-    foody = round(random.randrange(0,dis_height-snake_block)/10.0)*10.0
+    apple_x = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+    apple_y = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
     while not game_over:
 
-        while game_close == True:
+        while game_close:
             dis.fill(white)
-            message("You lost! press p to play again q to quit",red)
+            message("\tYou lost! press p to play again again q to quit", red)
             my_score(length_snake - 1)
             pygame.display.update()
 
@@ -133,21 +133,33 @@ def main_game():
             if event.type == pygame.QUIT:
                 game_over = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    x1_change = -snake_block
-                    y1_change = 0
-
-                elif event.key == pygame.K_RIGHT:
-                    x1_change = snake_block
-                    y1_change = 0
-
-                elif event.key == pygame.K_UP:
-                    x1_change = 0
-                    y1_change = -snake_block
-
-                elif event.key == pygame.K_DOWN:
-                    x1_change = 0
-                    y1_change = snake_block
+                if first_move:
+                    first_move = False
+                    if event.key == pygame.K_LEFT:
+                        x1_change = -snake_block
+                        y1_change = 0
+                    elif event.key == pygame.K_RIGHT:
+                        x1_change = snake_block
+                        y1_change = 0
+                    elif event.key == pygame.K_UP:
+                        x1_change = 0
+                        y1_change = -snake_block
+                    elif event.key == pygame.K_DOWN:
+                        x1_change = 0
+                        y1_change = snake_block
+                else:
+                    if event.key == pygame.K_LEFT and x1_change == 0:
+                        x1_change = -snake_block
+                        y1_change = 0
+                    elif event.key == pygame.K_RIGHT and x1_change == 0:
+                        x1_change = snake_block
+                        y1_change = 0
+                    elif event.key == pygame.K_UP and y1_change == 0:
+                        x1_change = 0
+                        y1_change = -snake_block
+                    elif event.key == pygame.K_DOWN and y1_change == 0:
+                        x1_change = 0
+                        y1_change = snake_block
 
         if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
             game_close = True
@@ -156,7 +168,8 @@ def main_game():
         y1 += y1_change
         dis.fill(black)
 
-        pygame.draw.rect(dis,red, [foodx,foody,snake_block,snake_block] )
+        draw_apple(apple_x, apple_y)
+
         snake_size = []
         snake_size.append(x1)
         snake_size.append(y1)
@@ -164,22 +177,24 @@ def main_game():
         if len(snake_list) > length_snake:
             del snake_list[0]
 
-        my_snake(snake_block,snake_list)
+        for segment in snake_list[:-1]:
+            if segment == snake_size:
+                game_close = True
+
+        my_snake(snake_block, snake_list)
         my_score(length_snake - 1)
 
         pygame.display.update()
 
-
-        if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width-snake_block) / 10.0) * 10.0
-            foody = round(random.randrange(0, dis_height-snake_block) / 10.0) * 10.0
-            length_snake +=1
+        if x1 == apple_x and y1 == apple_y:
+            apple_x = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+            apple_y = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+            length_snake += 1
 
         clock.tick(snake_speed)
 
     pygame.quit()
     quit()
-
 
 # In[22]:
 
