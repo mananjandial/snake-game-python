@@ -43,3 +43,9 @@ Run the Snake Game by executing the following command:
 * Press 'P' on the Game Over screen to play again.
 
 ## Screenshots ##
+![image](https://github.com/mananjandial/snake-game-python/assets/72250914/57c3e413-3eab-47b6-9df8-3aa859a7cf25)
+![image](https://github.com/mananjandial/snake-game-python/assets/72250914/d74b19be-5c2f-4688-aa09-2464abd17d53)
+![image](https://github.com/mananjandial/snake-game-python/assets/72250914/56cf47ce-8ac9-4ae3-a7ca-a74da886151a)
+
+
+
